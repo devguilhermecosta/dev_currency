@@ -1,0 +1,14 @@
+.C-logo {
+  padding: 15px 8px;
+}
+
+.C-logo > a {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 250px;
+}
+
+.C-logo > a > img {
+  width: 100%;
+}
