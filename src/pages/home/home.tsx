@@ -1,7 +1,8 @@
 import { BsSearch } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import './home.modules.css'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 
 interface CoinsProps {
@@ -25,6 +26,8 @@ interface CoinsData {
 export default function Home() {
 
   const [coins, setCoins] = useState<CoinsProps[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     function getData() {
@@ -32,7 +35,7 @@ export default function Home() {
       )
       .then(response => response.json())
       .then((data: CoinsData) => {
-        const coinsData = data.coins.slice(0, 5);
+        const coinsData = data.coins.slice(0, 3);
         const price = Intl.NumberFormat(
           'pt-br',
           {
@@ -58,13 +61,24 @@ export default function Home() {
 
   }, []);
 
+  function handleForm(e: FormEvent) {
+    e.preventDefault();
+    navigate(`/details/${inputValue}`);
+  }
+
   return (
     <main>
-      {/* form */}
+      {/* search form */}
       <section className="C-form">
-        <form action="">
-          <input type="text" name="code" id="code"
-          placeholder='Ex: BTC' />
+        <form onSubmit={handleForm}>
+          <input
+            type="text"
+            name="code"
+            id="code"
+            placeholder='Ex: BTC'
+            value={inputValue}
+            onChange={(e) => {setInputValue(e.target.value)}}
+            />
           <button type="submit">
             <BsSearch size={20} color="#fff" />
           </button>
@@ -87,7 +101,7 @@ export default function Home() {
             <tr key={coin.name}>
               <td className='C-table_link' data-label='moeda'>
                 {coin.name}
-                <Link to={`/detail/${coin.symbol}`}> | BTC</Link>
+                <Link to={`/detail/${coin.symbol}`}> | {coin.symbol}</Link>
               </td>
               <td data-label='mercado'>{coin.formatedMarket}</td>
               <td data-label='preço'>{coin.formatedPrice}</td>
