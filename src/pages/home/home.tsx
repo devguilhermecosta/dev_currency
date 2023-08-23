@@ -101,7 +101,7 @@ export default function Home() {
             <tr key={coin.name}>
               <td className='C-table_link' data-label='moeda'>
                 {coin.name}
-                <Link to={`/detail/${coin.symbol}`}> | {coin.symbol}</Link>
+                <Link to={`/details/${coin.symbol}`}> | {coin.symbol}</Link>
               </td>
               <td data-label='mercado'>{coin.formatedMarket}</td>
               <td data-label='preço'>{coin.formatedPrice}</td>
