@@ -5,22 +5,21 @@ import { useEffect, useState } from 'react'
 
 
 interface CoinsProps {
-  delta_24h: string,
-  market_cap: string,
-  name: string,
-  price: string,
-  rank: string,
-  show_symbol: string,
-  symbol: string,
-  volume_24h: string
+  delta_24h: string;
+  market_cap: string;
+  name: string;
+  price: string;
+  rank: string;
+  show_symbol: string;
+  symbol: string;
+  volume_24h: string;
+  formatedPrice: string;
+  formatedMarket: string
 }
 
 interface CoinsData {
-  coins: CoinsProps
+  coins: CoinsProps[]
 }
-
-// o toke tem limite de requisição.
-// criar um endpoint para prosseguir com os testes
 
 
 export default function Home() {
@@ -28,14 +27,35 @@ export default function Home() {
   const [coins, setCoins] = useState<CoinsProps[]>([]);
 
   useEffect(() => {
-    fetch('https://sujeitoprogramador.com/api-cripto/?key=ef4707e93f5f2a8d',
-    )
-    .then(response => response.json())
-    .then((data: CoinsData) => {
-      const coinsData = data.coins.slice(0, 15);
+    function getData() {
+      fetch('https://sujeitoprogramador.com/api-cripto/?key=ef4707e93f5f2a8d',
+      )
+      .then(response => response.json())
+      .then((data: CoinsData) => {
+        const coinsData = data.coins.slice(0, 5);
+        const price = Intl.NumberFormat(
+          'pt-br',
+          {
+            style: 'currency',
+            currency: 'BRL',
+          }
+        );
 
-      // setCoins(coinsData);
-    })
+        const formatedData = coinsData.map((item) => {
+          const formated = {
+            ...item,
+            formatedPrice: price.format(Number(item.price)),
+            formatedMarket: price.format(Number(item.market_cap))
+          }
+          return formated;
+        })
+
+        setCoins(formatedData);
+      })
+    }
+
+    getData();
+
   }, []);
 
   return (
@@ -63,15 +83,21 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className='C-table_link' data-label='moeda'>
-              Bitcoin
-              <Link to="/"> | BTC</Link>
-            </td>
-            <td data-label='mercado'>R$ 37.000,00</td>
-            <td data-label='preço'>R$ 36.000,00</td>
-            <td data-label='variação'>+5.3</td>
-          </tr>
+          {coins.map( coin => (
+            <tr key={coin.name}>
+              <td className='C-table_link' data-label='moeda'>
+                {coin.name}
+                <Link to={`/detail/${coin.symbol}`}> | BTC</Link>
+              </td>
+              <td data-label='mercado'>{coin.formatedMarket}</td>
+              <td data-label='preço'>{coin.formatedPrice}</td>
+              <td
+                data-label='variação'
+                className={Number(coin.delta_24h) >= 0 ? 'C-profits' : 'C-loss'}>
+                  {coin.delta_24h}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </section>
