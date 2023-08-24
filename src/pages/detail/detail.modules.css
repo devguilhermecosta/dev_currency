@@ -1,0 +1,52 @@
+.C-detail {
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+}
+
+.C-detail h1 {
+  font-weight: 600;
+  font-size: 25px;
+}
+
+.C-detail h2 {
+  font-weight: 300;
+  font-size: 12px;
+}
+
+.C-detail h1,
+.C-detail h2 {
+  margin-bottom: 10px;
+}
+
+.C-detail_data {
+  background-color: #0f0f0f;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 24px 12px;
+  border-radius: 8px;
+}
+
+.C-detail_data > p {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.C-detail_data > p:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+
+.C-detail_data > p span {
+  font-weight: 300;
+}
+
+.C-detail_data .profits {
+  color: #12f98a;
+}
+
+.C-detail_data .loss {
+  color: #f91257;
+}

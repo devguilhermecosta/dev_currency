@@ -1,0 +1,29 @@
+.C-notfound {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.C-notfound h1 {
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.C-notfound a {
+  text-decoration: none;
+  background-color: #575757;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 8px;
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  transition: transform 300ms ease,
+              color 300ms ease;
+}
+
+.C-notfound a:hover {
+  transform: scale(1.06);
+  color: #59c5f0;
+}

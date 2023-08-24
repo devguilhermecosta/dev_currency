@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import './detail.modules.css'
 
 interface CoinProps {
   delta_24h: string;
@@ -13,11 +15,14 @@ interface CoinProps {
   formatedMarket: string;
   formatedLow24: string;
   formatedHight24: string;
-  error?: string;
 }
 
 export default function Detail() {
   const { symbol } = useParams();
+  const [detail, setDetail] = useState<CoinProps>();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     function getData() {
@@ -38,19 +43,61 @@ export default function Detail() {
           formatedHight24: price.format(Number(data.high_24h))
         }
 
+        setDetail(formated);
+        setLoading(false);
+
         return formated;
       })
+      .catch(() => { navigate("/") })
     }
 
     getData();
 
-  }, [symbol])
+  }, [symbol, navigate])
 
-  // continuar daqui -> criar a renderização condicional com loading
+  if (loading) {
+    return (
+      <div>
+        <section className="C-detail">
+          <h2>Carregando informações</h2>
+        </section>
+      </div>
+    )
+  }
 
   return (
     <div>
-      <h1>Details of {symbol}</h1>
+      <section className="C-detail">
+        <h1>{detail?.name}</h1>
+        <h2>{detail?.symbol}</h2>
+
+        <section className="C-detail_data">
+          <p>
+            Preço:
+            <span>{detail?.formatedPrice}</span>
+          </p>
+          <p>
+            Maior preço 24h:
+            <span>{detail?.formatedHight24}</span>
+          </p>
+          <p>
+            Menor preço 24h
+            <span>{detail?.formatedLow24}</span>
+          </p>
+          <p>
+            Delta 24h:
+            <span
+              className={Number(detail?.delta_24h) >= 0 ? 'profits' : 'loss'}
+              >
+              {detail?.delta_24h}
+            </span>
+          </p>
+          <p>
+            Valor mercado:
+            <span>{detail?.formatedMarket}</span>
+          </p>
+        </section>
+      </section>
     </div>
   )
 }
